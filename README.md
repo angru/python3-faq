@@ -1,40 +1,41 @@
-## Python FAQ: Why should I use Python 3?
+## Python FAQ: Почему я должен использовать Python 3?
 
-Part of my [Python FAQ](https://eev.ee/blog/2011/07/22/python-faq/), which is doomed to never be finished.
+*Отрывок из моего [Python FAQ](https://eev.ee/blog/2011/07/22/python-faq/), который похоже никогда не будет дописан.*
 
-The short answer is: because it’s the actively-developed version of the language, and you should use it for the same reason you’d use 2.7 instead of 2.6.
+Если вкратце, то потому, что это активно разрабатываемая ветка языка и ее стоит использовать по той же причине, по которой мы используем версию 2.7 вместо 2.6.
 
-If you’re here, I’m guessing that’s not enough. You need something to sweeten the deal. Well, friend, I have got a whole mess of sugar cubes just for you.
+Если вы продолжаете читать дальше, я полагаю, что вам недостаточно такого обьяснения. Чтож, у меня есть целая куча аргементов.
 
-And once you’re convinced, you may enjoy the companion article, [how to port to Python 3](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)! It also has some more details on the diffences between Python 2 and 3, whereas this article doesn’t focus too much on the features removed in Python 3.
+И когда вы поймете, вам возможно пригодится еще одна статья: [как портировать программу на Python 3](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)! К тому же там содержится больше информации о различиях между второй и третьей веткой, так как в этой статье опускается описание возможностей, удаленных из третьей ветки.
 
 ---
 
-### Some background
+### Немного теории
 
-If you aren’t neck-deep in Python, you might be wondering what the fuss is all about, or why people keep telling you that Python 3 will set your computer on fire. (It won’t.)
+Если вы не ярый адепт питона, тогда вы можете задаваться вопросом: что за суета вокруг этого языка и почему все говорят, что Python 3 может превратить ваш компьютер в вундервафлю(это не так).
 
-Python 2 is a good language, but it comes with some considerable baggage. It has two integer types; it may or may not be built in a way that completely mangles 16/17 of the Unicode space; it has a confusing mix of lazy and eager functional tools; it has a standard library that takes “batteries included” to [lengths beyond your wildest imagination](https://docs.python.org/2/library/sgi.html); it boasts strong typing, then casually insists that `None < 3 < "2"`; overall, it’s just full of little dark corners containing weird throwbacks to the days of Python 1.
 
-(If you’re really interested, Nick Coghlan has written an exhaustive treatment of the slightly different question of [why Python 3 was created](http://python-notes.curiousefficiency.org/en/latest/python3/questions_and_answers.html). This post is about why Python 3 is *great*, so let’s focus on that.)
+Python 2 - отличный язык, но в нем присутствует много специфичных особенностей. Например: там есть два разных типа для целых чисел, it may or may not be built in a way that completely mangles 16/17 of the Unicode space, путаница с функциональными возможностями, которые в одних случаях используют ленивые вычисления, а в других - нет, стандартная библиотека наполнена слишком [специфичными модулями](https://docs.python.org/2/library/sgi.html), язык хвастается строгой типизацией, но внезапно утверждает что `None < 3 < "2"`, и в целом полно темных мест, навевающих воспоминания о Python 1.
 
-Fixing these things could break existing code, whereas virtually all code written for 2.0 will still work on 2.7. So Python decided to fix them all at once, producing a not-quite-compatible new version of the language, Python 3.
+(Если вам действительно интересно, Nick Coghlan написал исчерпывающий ответ на вопрос [зачем был создан Python 3](http://python-notes.curiousefficiency.org/en/latest/python3/questions_and_answers.html). Эта же статья о том, почему Python 3 прекрасен, так что давайте сосредоточимся на этом.)
 
-Nothing like this has really happened with a mainstream programming language before, and it’s been a bit of a bumpy ride since then. Python 3 was (seemingly) designed with the assumption that everyone would just port to Python 3, drop Python 2, and that would be that. Instead, it’s turned out that most libraries want to continue to run on *both* Python 2 and Python 3, which was considerably difficult to make work at first. Python 2.5 was still in common use at the time, too, and it had none of the helpful backports that showed up in Python 2.6 and 2.7; likewise, Python 3.0 didn’t support `u''` strings. Writing code that works on both 2.5 and 3.0 was thus a ridiculous headache.
+Исправление этих особенностей могло сделать нерабочим существующий код, тогда как практически весь код написанный для версии 2.0 будет все еще работать и в версии 2.7. Так что разработчики Python решили исправить все недостатки сразу, впустив не полностью обратносовместимую новую версию языка - Python 3.
 
-The porting effort also had a dependency problem: if your library or app depends on library A, which depends on library B, which depends on C, which depends on D… then none of those projects can even think about porting until D’s porting effort is *finished*. Early days were very slow going.
+Такое еще никогда не случалось с популярными языками, *and it’s been a bit of a bumpy ride since then*. Python 3 (по-видимому) был спроектирован в предположении, что все портируют свой код и перестанут использовать вторую ветку. Вместо этого оказалось, что авторы большинства библиотек хотят, чтобы они работали и со второй и с третьей версиями, хотя это было очень сложно поначалу. К тому же Python 2.5 был все еще распространен в то время и не имел поддерживал многие возможности, представленные в версиях 2.6 и 2.7, также как и Python 3 не поддерживал литерал `u''` для Юникода. Поэтому написание кода, который бы работал  и версии 2.5 и в 3.0 - было сплошной головной болью.
 
-Now, though, things are looking brighter. [Most popular libraries work with Python 3](http://py3readiness.org/), and those that don’t are working on it. Python 3’s Unicode handling, one of its most contentious changes, has had many of its wrinkles ironed out. Python 2.7 consists largely of backported Python 3 features, making it much simpler to target 2 and 3 with the same code — and both 2.5 and 2.6 are no longer supported.
+А еще существовала проблема зависимостей: если ваша библиотека или приложение зависили от библиотеки A, которая зависила от библиотеки B, зависящей от библиотеки C, которая в свою очередь зависит от библиотеки D... то ни один из этих проектов не мог быть портирован, пока не будет портирована бибилотека D. Это был очень медленный процесс в то время.
 
-Don’t get me wrong, Python 2 will still be around for a while. A lot of large applications have been written for Python 2 — think websites like Yelp, YouTube, Reddit, Dropbox — and porting them will take some considerable effort. I happen to know that at least one of those websites was still running 2.6 last year, years after 2.6 had been discontinued, if that tells you anything about the speed of upgrades for big lumbering software.
+Хотя сейчас ситуация выглядит радужнее. [Большинство популярных библиотек работают с Python 3](http://py3readiness.org/), а остальные работают над в этом направлении. Обработка Юникода — одна из самых спорных особенностей в Python 3, очень много из ее недостатков уже исправлено. Python 2.7 во многом состоит из возможностей портированных из Python 3, поэтому теперь намного проще писать код работаюзий и во второй и в третьей ветках, а ветки 2.5 и 2.6 уже не поддерживаются.
 
-But if you’re just getting started in Python, or looking to start a new project, there aren’t many reasons not to use Python 3. There are still *some*, yes — but unless you have one specifically in mind, they probably won’t affect you.
+Не поймите меня неправильно, Python 2 все еще будет использоваться какое-то время.Очень много приложений написанно на Python 2 — Yelp, YouTube, Reddit, Dropbox, портирование которых потребует значительных усилий. Я случайно узнал, что один из этих сайтов все еще запускается под Python 2.6, хотя эта ветка уже давно не поддерживается. Это чтобы вы понимали как медленно продвигается процесс портирования таких больших приложений.
 
-I keep having Python beginners tell me that all they know about Python 3 is that some tutorial tried to ward them away from it for vague reasons. (Which is ridiculous, since especially for beginners, Python 2 and 3 are fundamentally not that different.) Even the #python IRC channel has a few people who react, ah, somewhat passive-aggressively towards mentions of Python 3. Most of the technical hurdles have long since been cleared; it seems like one of the biggest roadblocks now standing in the way of Python 3 adoption is the community’s desire to sabotage itself.
+Но если вы еще новичок или собираететсь начать новый проект — есть много причин не использовать Python 3. Все еще есть несколько *но*, хотя если вы будете осведомлены о них, то скорее всего они не доставят вам хлопот.
 
-I think that’s a huge shame. Not many people seem to want to stand up for Python 3, either.
+Некоторые новички в Python говорят мне, что все, что они знают о Python 3 — это то, что некоторые учебники советуют не использовать его в силу каких-то расплывчатых причин(которые нелепы, особенно для новичков, потому что Python 2 и Python 3 не так сильно различаются). Даже в IRC канале #python, есть несколько людей, которые с некоторой агрессией относятся к упоминаниям о Python 3. Большинство технических препятствий уже давно устранены, похоже самое большое препятствие на пути к Python 3 - сообщество, саботирующее процесс перехода.
 
-Well, here I am, standing up for Python 3. I write all my new code in Python 3 now — because **Python 3 is great and you should use it**. Here’s why.
+Я думаю это большой позорю Кажется немногие люди хотят переходить на Python 3.
+
+Ну а я использую Python 3. Я пишу на нем все свои новые проекты, потому что - **Python 3 замечательный и вы должны использовать его**. И вот почему.
 
 ---
 
